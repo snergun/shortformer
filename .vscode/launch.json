@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python Debugger: Shortformer LM Eval (WikiText-103)",
+            "type": "debugpy",
+            "python": "/opt/conda/envs/shortformer/bin/python",
+            "request": "launch",
+            "program": "fairseq_cli/eval_lm.py",
+            "console": "integratedTerminal",
+            "args": [
+                "data/wikitext-103",
+                "--path", "checkpoints/shortformer/model.pt",
+                "--sample-break-mode", "none",
+                "--gen-subset", "test",
+                "--max-sentences", "1",
+                "--save-layers", "-1",
+                "--save-probs",
+                "--results-path", "checkpoints/shortformer/results"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+    ]
+}

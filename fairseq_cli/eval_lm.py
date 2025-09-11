@@ -141,6 +141,9 @@ def main(parsed_args, **unused_kwargs):
     score_sum = 0.
     count = 0
 
+    if args.results_path is not None:
+        os.makedirs(args.results_path, exist_ok=True)
+
     if args.save_layers != []:
         n_layers = len(models[0].decoder.layers)
         save_layers = [l if l != -1 else n_layers-1 for l in args.save_layers]
@@ -186,11 +189,11 @@ def main(parsed_args, **unused_kwargs):
         # Pointer for saving features and probs
         sample_save_pointer = np.cumsum(np.concatenate([np.array([0]),dataset.sizes]))[:-1]
         sample_save_pointer = {i: sample_save_pointer[i] for i in range(len(sample_save_pointer))}
-        
+
         sample = utils.move_to_cuda(sample) if use_cuda else sample
 
         gen_timer.start()
-        hypos = scorer.generate(models, sample)
+        hypos = scorer.generate(models, sample, save_layers=args.save_layers)
         gen_timer.stop(sample['ntokens'])
 
         for i, hypos_i in enumerate(hypos):
