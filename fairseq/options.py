@@ -556,6 +556,10 @@ def add_eval_lm_args(parser):
     group.add_argument('--softmax-batch', default=sys.maxsize, type=int, metavar='N',
                        help='if BxT is more than this, will batch the softmax over vocab to this amount of tokens'
                             ' in order to fit into GPU memory')
+    group.add_argument('--save-layers', default=[], type=int, nargs='+',
+                    help='Layers to save features from. -1 for last layer, 0 for first layer.')
+    group.add_argument('--save-probs', action='store_true',
+                       help='if set, save target word probabilities to numpy memmap')
     # fmt: on
 
 

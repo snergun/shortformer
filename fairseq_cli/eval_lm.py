@@ -11,7 +11,8 @@ Evaluate the perplexity of a trained language model.
 import logging
 import math
 import os
-
+import numpy as np
+from numpy.lib.format import open_memmap
 import torch
 
 from fairseq import checkpoint_utils, options, tasks, utils
@@ -140,6 +141,25 @@ def main(parsed_args, **unused_kwargs):
     score_sum = 0.
     count = 0
 
+    if args.save_layers != []:
+        n_layers = len(models[0].decoder.layers)
+        save_layers = [l if l != -1 else n_layers-1 for l in args.save_layers]
+        layer_memmaps = {
+            f"layer_{l}_states": open_memmap(
+                os.path.join(args.results_path, f"{args.gen_subset if args.gen_subset != 'valid' else 'validation'}_layer_{l}_layer_output.npy"),
+                dtype=np.float32,
+                mode='w+',
+                shape=(sum(dataset.sizes), args.decoder_input_dim)
+            ) for l in save_layers
+        }
+    if args.save_probs:
+        probs_memmap = open_memmap(
+            os.path.join(args.results_path, f"{args.gen_subset if args.gen_subset != 'valid' else 'validation'}_prob.npy"),
+            dtype=np.float32,
+            mode='w+',
+            shape=(sum(dataset.sizes),)
+            )
+        
     if args.remove_bpe is not None:
         if args.remove_bpe == 'sentencepiece':
             raise NotImplementedError
@@ -163,6 +183,10 @@ def main(parsed_args, **unused_kwargs):
         if 'net_input' not in sample:
             continue
 
+        # Pointer for saving features and probs
+        sample_save_pointer = np.cumsum(np.concatenate([np.array([0]),dataset.sizes]))[:-1]
+        sample_save_pointer = {i: sample_save_pointer[i] for i in range(len(sample_save_pointer))}
+        
         sample = utils.move_to_cuda(sample) if use_cuda else sample
 
         gen_timer.start()
@@ -176,7 +200,15 @@ def main(parsed_args, **unused_kwargs):
             tokens = hypo['tokens']
             tgt_len = tokens.numel()
             pos_scores = hypo['positional_scores'].float()
-
+            # Save layer states and probs if requested
+            current_idx = sample_save_pointer[sample_id.item()]
+            if args.save_layers != []:
+                for l in save_layers:
+                    layer_memmaps[f"layer_{l}_states"][current_idx:current_idx + tgt_len, :] = \
+                        hypo[f"layer_{l}_states"].cpu().numpy()
+            if args.save_probs:
+                probs_memmap[current_idx:current_idx + tgt_len] = pos_scores.cpu().numpy()
+            sample_save_pointer[sample_id.item()] += tgt_len
             if getattr(args, 'add_bos_token', False):
                 assert hypo['tokens'][0].item() == task.target_dictionary.bos()
                 tokens = tokens[1:]
