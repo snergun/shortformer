@@ -63,8 +63,9 @@
                 "--curriculum", "1000",
                 "--required-batch-size-multiple", "1",
                 "--save-interval", "100",
-                // "--temp-degree", "2",
-                // "--temp-pieces", "1",
+                "--temp-degree", "1",
+                "--temp-pieces", "10",
+                "--fixed-thresholds"
             ],
             "cwd": "${workspaceFolder}"
         },
