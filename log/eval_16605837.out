@@ -1,0 +1,29 @@
+/var/spool/slurmd/job16605837/slurm_script: line 14: conda: command not found
+Running "module reset". Resetting modules to system default. The following $MODULEPATH directories have been removed: /sw/rh9.4/spack/default/modules/lmod/linux-rhel9-x86_64/Core
+Lmod has detected the following error: The following module(s) are unknown:
+"anaconda3_gpu"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "anaconda3_gpu"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+/var/spool/slurmd/job16605837/slurm_script: line 18: activate: No such file or directory
+Lmod has detected the following error: The following module(s) are unknown:
+"cuda/11.3"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore_cache load "cuda/11.3"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+pod_scripts/eval_lm.sh: line 9: fairseq-eval-lm: command not found
+pod_scripts/eval_lm.sh: line 17: fairseq-eval-lm: command not found
