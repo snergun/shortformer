@@ -22,19 +22,19 @@ module unload cudatoolkit
 module load cuda/11.8
 
 
-BASE_SAVE_DIR="checkpoints/baseline"
-SAVE_DIR="${BASE_SAVE_DIR}_${SLURM_JOB_ID:-local}"
+# BASE_SAVE_DIR="checkpoints/baseline"
+# SAVE_DIR="${BASE_SAVE_DIR}_${SLURM_JOB_ID:-local}"
 
-# If the directory exists, append a timestamp to make it unique
-if [ -d "$SAVE_DIR" ]; then
-    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    SAVE_DIR="${BASE_SAVE_DIR}_${TIMESTAMP}"
-fi
+# # If the directory exists, append a timestamp to make it unique
+# if [ -d "$SAVE_DIR" ]; then
+#     TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+#     SAVE_DIR="${BASE_SAVE_DIR}_${TIMESTAMP}"
+# fi
 
 echo "Results will be saved to: $SAVE_DIR"
 python train.py data/wikitext-103 \
     --task language_modeling \
-    --save-dir $SAVE_DIR \
+    --save-dir checkpoints/baseline_17991931 \
     --arch transformer_lm_wiki103 \
     --max-update 26433 \
     --max-lr 1.0 \
@@ -62,4 +62,6 @@ python train.py data/wikitext-103 \
     --required-batch-size-multiple 1 \
     --save-interval-updates 1000 \
     --log-interval 50 \
+    --no-epoch-checkpoints \
+    --keep-interval-updates 1 \
 

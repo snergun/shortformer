@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=128G
 #SBATCH --partition=gpuA100x4,gpuA100x8
 #SBATCH --account=bcyi-delta-gpu
 #SBATCH --gpus=4
@@ -63,5 +63,7 @@ python train.py data/wikitext-103 \
     --temp-pieces 1 \
     --save-interval-updates 1000 \
     --log-interval 50 \
+    --no-epoch-checkpoints \
+    --keep-interval-updates 1 \
 
 
