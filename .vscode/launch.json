@@ -54,7 +54,6 @@
                 "--max-tokens", "9216",
                 "--update-freq", "1",
                 "--seed", "1",
-                "--fp16",
                 "--sample-break-mode", "none",
                 "--skip-invalid-size-inputs-valid-test",
                 "--ddp-backend", "no_c10d",
@@ -64,8 +63,8 @@
                 "--curriculum", "1000",
                 "--required-batch-size-multiple", "1",
                 "--save-interval", "100",
-                "--temp-degree", "2",
-                "--temp-pieces", "1",
+                // "--temp-degree", "2",
+                // "--temp-pieces", "1",
             ],
             "cwd": "${workspaceFolder}"
         },

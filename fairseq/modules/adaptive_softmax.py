@@ -101,6 +101,7 @@ class AdaptiveSoftmax(nn.Module):
         self.temperature_scaler = None
         if temp_degree is not None and temp_degree > 0:
             self.temperature_scaler = TemperatureScaler(
+                n_temp = len(cutoff),
                 degree=temp_degree,
                 pieces=temp_pieces,
                 threshold_min=threshold_min, 
