@@ -1,0 +1,58 @@
+/var/spool/slurmd/job16606053/slurm_script: line 14: conda: command not found
+Running "module reset". Resetting modules to system default. The following $MODULEPATH directories have been removed: /sw/rh9.4/spack/default/modules/lmod/linux-rhel9-x86_64/Core
+=====================================================
+Conda-Forge PyTorch 2.8 Environment Loaded Successfully!
+=====================================================
+
+To activate the environment:
+  conda activate base
+
+If 'conda activate' fails, use:
+  source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate base
+
+To verify PyTorch installation:
+  python -c "import torch; print(f'PyTorch {torch.__version__} CUDA:
+{torch.cuda.is_available()}')"
+
+Environment includes:
+  - PyTorch 2.8 with CUDA 12.8 support
+  - Scientific Python stack (numpy, scipy, pandas)
+  - ML libraries (transformers, lightning, timm)
+  - Cray PE integration with optimized MPI
+
+For Jupyter notebook support:
+  setup-kernel (creates Jupyter kernel for this environment)
+
+For distributed training, load:
+  module load aws-ofi-nccl/1.14.2
+
+Ready for single-node and distributed training!
+=====================================================
+
+/usr/share/lmod/lmod/init/bash: line 245: : command not found
+2026-03-12 20:14:31 | INFO | fairseq_cli.eval_lm | Namespace(add_bos_token=False, all_gather_list_size=16384, bf16=False, bpe=None, broadcast_buffers=False, bucket_cap_mb=25, checkpoint_suffix='', context_window=0, cpu=False, criterion='cross_entropy', data='data/wikitext-103', data_buffer_size=10, dataset_impl=None, ddp_backend='c10d', device_id=0, distributed_backend='nccl', distributed_init_method=None, distributed_no_spawn=False, distributed_num_procs=1, distributed_port=-1, distributed_rank=0, distributed_world_size=1, distributed_wrapper='DDP', empty_cache_freq=0, fast_stat_sync=False, find_unused_parameters=False, fix_batches_to_gpus=False, force_anneal=None, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, future_target=False, gen_subset='valid', localsgd_frequency=3, log_format=None, log_interval=100, lr_scheduler='fixed', lr_shrink=0.1, max_sentences=1, max_target_positions=None, max_tokens=None, memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, model_overrides='{}', model_parallel_size=1, no_progress_bar=False, no_seed_provided=True, nprocs_per_node=1, num_shards=1, num_workers=1, optimizer=None, output_dictionary_size=-1, output_word_probs=False, output_word_stats=False, past_target=False, path='checkpoints/shortformer/model.pt', pipeline_balance=None, pipeline_checkpoint='never', pipeline_chunks=None, pipeline_devices=None, pipeline_model_parallel=False, profile=False, quantization_config_path=None, quiet=False, remove_bpe=None, required_batch_size_multiple=8, results_path='checkpoints/shortformer/results/', sample_break_mode='none', save_layers=[-1], save_probs=True, scoring='bleu', seed=1, self_target=False, shard_id=0, shorten_data_split_list='', shorten_method='none', skip_invalid_size_inputs_valid_test=False, sliding_inf=-1, slowmo_algorithm='LocalSGD', slowmo_momentum=None, softmax_batch=9223372036854775807, task='language_modeling', tensorboard_logdir='', threshold_loss_scale=None, tokenizer=None, tokens_from_prev=0, tokens_per_sample=1024, tpu=False, user_dir=None, warmup_updates=0, zero_sharding='none')
+2026-03-12 20:14:32 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
+2026-03-12 20:14:32 | INFO | fairseq_cli.eval_lm | loading model(s) from checkpoints/shortformer/model.pt
+2026-03-12 20:14:49 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
+2026-03-12 20:14:49 | INFO | fairseq.data.data_utils | loaded 3760 examples from: data/wikitext-103/valid
+2026-03-12 20:14:50 | INFO | fairseq_cli.eval_lm | data/wikitext-103 valid 426 examples
+2026-03-12 20:15:00 | INFO | fairseq_cli.eval_lm | num. model params: 246933504
+2026-03-12 20:15:05 | INFO | fairseq.logging.progress_bar | :    101 / 426 wps=13532
+2026-03-12 20:15:08 | INFO | fairseq.logging.progress_bar | :    201 / 426 wps=14972
+2026-03-12 20:15:11 | INFO | fairseq.logging.progress_bar | :    301 / 426 wps=15282
+2026-03-12 20:15:14 | INFO | fairseq.logging.progress_bar | :    401 / 426 wps=15155
+2026-03-12 20:15:15 | INFO | fairseq_cli.eval_lm | Evaluated 217646 tokens in 6.0s (36238.05 tokens/s)
+2026-03-12 20:15:15 | INFO | fairseq_cli.eval_lm | Loss (base 2): 4.1270, Perplexity: 17.47
+2026-03-12 20:15:18 | INFO | fairseq_cli.eval_lm | Namespace(add_bos_token=False, all_gather_list_size=16384, bf16=False, bpe=None, broadcast_buffers=False, bucket_cap_mb=25, checkpoint_suffix='', context_window=0, cpu=False, criterion='cross_entropy', data='data/wikitext-103', data_buffer_size=10, dataset_impl=None, ddp_backend='c10d', device_id=0, distributed_backend='nccl', distributed_init_method=None, distributed_no_spawn=False, distributed_num_procs=1, distributed_port=-1, distributed_rank=0, distributed_world_size=1, distributed_wrapper='DDP', empty_cache_freq=0, fast_stat_sync=False, find_unused_parameters=False, fix_batches_to_gpus=False, force_anneal=None, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, future_target=False, gen_subset='test', localsgd_frequency=3, log_format=None, log_interval=100, lr_scheduler='fixed', lr_shrink=0.1, max_sentences=1, max_target_positions=None, max_tokens=None, memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, model_overrides='{}', model_parallel_size=1, no_progress_bar=False, no_seed_provided=True, nprocs_per_node=1, num_shards=1, num_workers=1, optimizer=None, output_dictionary_size=-1, output_word_probs=False, output_word_stats=False, past_target=False, path='checkpoints/shortformer/model.pt', pipeline_balance=None, pipeline_checkpoint='never', pipeline_chunks=None, pipeline_devices=None, pipeline_model_parallel=False, profile=False, quantization_config_path=None, quiet=False, remove_bpe=None, required_batch_size_multiple=8, results_path='checkpoints/shortformer/results/', sample_break_mode='none', save_layers=[-1], save_probs=True, scoring='bleu', seed=1, self_target=False, shard_id=0, shorten_data_split_list='', shorten_method='none', skip_invalid_size_inputs_valid_test=False, sliding_inf=-1, slowmo_algorithm='LocalSGD', slowmo_momentum=None, softmax_batch=9223372036854775807, task='language_modeling', tensorboard_logdir='', threshold_loss_scale=None, tokenizer=None, tokens_from_prev=0, tokens_per_sample=1024, tpu=False, user_dir=None, warmup_updates=0, zero_sharding='none')
+2026-03-12 20:15:18 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
+2026-03-12 20:15:18 | INFO | fairseq_cli.eval_lm | loading model(s) from checkpoints/shortformer/model.pt
+2026-03-12 20:15:21 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
+2026-03-12 20:15:21 | INFO | fairseq.data.data_utils | loaded 4358 examples from: data/wikitext-103/test
+2026-03-12 20:15:21 | INFO | fairseq_cli.eval_lm | data/wikitext-103 test 480 examples
+2026-03-12 20:15:24 | INFO | fairseq_cli.eval_lm | num. model params: 246933504
+2026-03-12 20:15:27 | INFO | fairseq.logging.progress_bar | :    101 / 480 wps=16971
+2026-03-12 20:15:30 | INFO | fairseq.logging.progress_bar | :    201 / 480 wps=16979
+2026-03-12 20:15:33 | INFO | fairseq.logging.progress_bar | :    301 / 480 wps=17470
+2026-03-12 20:15:36 | INFO | fairseq.logging.progress_bar | :    401 / 480 wps=17399
+2026-03-12 20:15:38 | INFO | fairseq_cli.eval_lm | Evaluated 245569 tokens in 6.5s (37780.47 tokens/s)
+2026-03-12 20:15:38 | INFO | fairseq_cli.eval_lm | Loss (base 2): 4.1820, Perplexity: 18.15
