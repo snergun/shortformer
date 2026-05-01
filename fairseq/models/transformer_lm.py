@@ -124,6 +124,18 @@ class TransformerLanguageModel(FairseqLanguageModel):
                             help='scalar quantization noise and scalar quantization at training time')
         # fmt: on
 
+        # Temperature scaling arguments
+        parser.add_argument('--temp-degree', type=int, default=None, metavar='D',
+                            help='degree of temperature scaling (default: None, no temperature scaling)')
+        parser.add_argument('--temp-pieces', type=int, default=None, metavar='N',
+                            help='number of pieces for piecewise temperature scaling (default: None, no piecewise temperature scaling)')
+        parser.add_argument('--threshold-min', type=float, default=None, metavar='D',
+                            help='minimum threshold for piecewise temperature scaling (default: None, no piecewise temperature scaling)')
+        parser.add_argument('--threshold-max', type=float, default=None, metavar='D',
+                            help='maximum threshold for piecewise temperature scaling (default: None, no piecewise temperature scaling)')
+        parser.add_argument('--fixed-thresholds', action='store_true',
+                            help='if set, uses fixed thresholds for piecewise temperature scaling instead of learnable thresholds')
+        
     @classmethod
     def build_model(cls, args, task):
         """Build a new model instance."""
@@ -224,6 +236,8 @@ def base_lm_architecture(args):
     args.no_scale_embedding = getattr(args, 'no_scale_embedding', False)
     args.layernorm_embedding = getattr(args, 'layernorm_embedding', False)
 
+    #Set fixed_thresholds to False if missing
+    args.fixed_thresholds = getattr(args, 'fixed_thresholds', False)
 
 @register_model_architecture('transformer_lm', 'transformer_lm_big')
 def transformer_lm_big(args):

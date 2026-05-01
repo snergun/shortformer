@@ -12,6 +12,9 @@ from fairseq.modules.quant_noise import quant_noise
 from fairseq.modules.fairseq_dropout import FairseqDropout
 from torch import nn
 
+## MINE
+from fairseq.modules.temperature import TemperatureScaler
+
 
 class TiedLinear(nn.Module):
     def __init__(self, weight, transpose):
@@ -57,7 +60,8 @@ class AdaptiveSoftmax(nn.Module):
     """
 
     def __init__(self, vocab_size, input_dim, cutoff, dropout, factor=4., adaptive_inputs=None, tie_proj=False,
-                 q_noise=0, qn_block_size=8):
+                 q_noise=0, qn_block_size=8,
+                 temp_degree=None, temp_pieces=1, threshold_min=-30, threshold_max=30, fixed_thresholds=False):
         super().__init__()
 
         if vocab_size > cutoff[-1]:
@@ -92,6 +96,16 @@ class AdaptiveSoftmax(nn.Module):
         self.apply(init_weights)
 
         self.register_buffer('version', torch.LongTensor([1]))
+
+        ## Initialize temperature scaler
+        self.temperature_scaler = None
+        if temp_degree is not None and temp_degree > 0:
+            self.temperature_scaler = TemperatureScaler(
+                degree=temp_degree,
+                pieces=temp_pieces,
+                threshold_min=threshold_min, 
+                threshold_max=threshold_max, 
+                fixed_thresholds=fixed_thresholds)
 
     def _make_tail(self, adaptive_inputs=None, tie_proj=False):
         self.tail = nn.ModuleList()
@@ -165,11 +179,17 @@ class AdaptiveSoftmax(nn.Module):
         input = self.dropout_module(input)
 
         new_target, target_idxs = self.adapt_target(target)
-        output = [self.head(input)]
+        head_output = self.head(input)
+        if self.temperature_scaler is not None:
+            head_output = self.temperature_scaler(head_output, 0)
+        output = [head_output]
 
         for i in range(len(target_idxs)):
             if target_idxs[i] is not None:
-                output.append(self.tail[i](input.index_select(0, target_idxs[i])))
+                cluster_out = self.tail[i](input.index_select(0, target_idxs[i]))
+                if self.temperature_scaler is not None:
+                    cluster_out = self.temperature_scaler(cluster_out, i + 1)
+                output.append(cluster_out)
             else:
                 output.append(None)
 

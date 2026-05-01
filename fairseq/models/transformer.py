@@ -173,6 +173,8 @@ class TransformerModel(FairseqEncoderDecoderModel):
                             help='scalar quantization noise and scalar quantization at training time')
         # fmt: on
 
+
+
     @classmethod
     def build_model(cls, args, task):
         """Build a new model instance."""
@@ -616,6 +618,11 @@ class TransformerDecoder(FairseqIncrementalDecoder):
                 adaptive_inputs=embed_tokens if args.tie_adaptive_weights else None,
                 factor=args.adaptive_softmax_factor,
                 tie_proj=args.tie_adaptive_proj,
+                temp_degree=args.temp_degree,
+                temp_pieces=args.temp_pieces,
+                threshold_min=args.threshold_min,
+                threshold_max=args.threshold_max,
+                fixed_thresholds=args.fixed_thresholds,
             )
         elif self.share_input_output_embed:
             self.output_projection = nn.Linear(
