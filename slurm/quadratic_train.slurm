@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=64
 #SBATCH --mem=128G
-#SBATCH --partition=gpuA100x4,gpuA100x8
+#SBATCH --partition=gpuA100x4,gpuA100x8,gpuA40x4
 #SBATCH --account=bcyi-delta-gpu
 #SBATCH --gpus=4
 #SBATCH --time=40:00:00

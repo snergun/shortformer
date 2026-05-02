@@ -3,11 +3,11 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
-#SBATCH --partition=gpuA100x4,gpuA100x8
+#SBATCH --partition=gpuA100x4,gpuA100x8,gpuA40x4
 #SBATCH --account=bcyi-delta-gpu
 #SBATCH --gpus=4
 #SBATCH --time=40:00:00
-#SBATCH --job-name=baseline_multi_gpu
+#SBATCH --job-name=baseline
 #SBATCH --output=log/baseline/%j.out
 
 # Load modules and activate environment
@@ -50,7 +50,7 @@ python train.py data/wikitext-103 \
     --clip-norm 0.1 \
     --criterion adaptive_loss \
     --max-tokens 12288 \
-    --update-freq 1 \
+    --update-freq 4 \
     --seed 1 \
     --sample-break-mode none \
     --skip-invalid-size-inputs-valid-test \
