@@ -5,7 +5,7 @@
 #SBATCH --mem=32G
 #SBATCH --partition=gpuA100x4,gpuA100x8
 #SBATCH --account=bcyi-delta-gpu
-#SBATCH --gpus=2
+#SBATCH --gpus=4
 #SBATCH --time=40:00:00
 #SBATCH --job-name=staged_quadratic
 #SBATCH --output=log/staged_quadratic/%j.out

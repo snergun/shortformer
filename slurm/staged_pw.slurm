@@ -5,7 +5,7 @@
 #SBATCH --mem=64G
 #SBATCH --partition=gpuA100x4,gpuA100x8
 #SBATCH --account=bcyi-delta-gpu
-#SBATCH --gpus=4
+#SBATCH --gpus=2
 #SBATCH --time=40:00:00
 #SBATCH --job-name=staged_pw
 #SBATCH --output=log/staged_pw/%j.out
@@ -50,7 +50,7 @@ python train.py data/wikitext-103 \
     --clip-norm 0.1 \
     --criterion adaptive_loss \
     --max-tokens 9216 \
-    --update-freq 2 \
+    --update-freq 4 \
     --seed 1 \
     --sample-break-mode none \
     --skip-invalid-size-inputs-valid-test \
