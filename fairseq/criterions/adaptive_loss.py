@@ -10,6 +10,7 @@ import torch.nn.functional as F
 from fairseq import metrics, utils
 from fairseq.criterions import FairseqCriterion, register_criterion
 
+from line_profiler import profile
 
 @register_criterion('adaptive_loss')
 class AdaptiveLoss(FairseqCriterion):
@@ -30,7 +31,8 @@ class AdaptiveLoss(FairseqCriterion):
                 '`--ddp-backend=no_c10d` instead.'
             )
         return cls(task, args.sentence_avg)
-
+    
+    @profile
     def forward(self, model, sample, reduce=True):
         """Compute the loss for the given sample.
 

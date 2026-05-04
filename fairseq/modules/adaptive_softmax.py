@@ -14,7 +14,7 @@ from torch import nn
 
 ## MINE
 from fairseq.modules.temperature import TemperatureScaler
-
+from line_profiler import profile
 
 class TiedLinear(nn.Module):
     def __init__(self, weight, transpose):
@@ -167,6 +167,7 @@ class AdaptiveSoftmax(nn.Module):
 
         return new_target, target_idxs
 
+    @profile
     def forward(self, input, target):
         """
         Args:

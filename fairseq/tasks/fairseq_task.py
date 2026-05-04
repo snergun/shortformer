@@ -16,6 +16,7 @@ from argparse import Namespace
 
 logger = logging.getLogger(__name__)
 
+from line_profiler import profile
 
 class FairseqTask(object):
     """
@@ -379,6 +380,7 @@ class FairseqTask(object):
             **extra_gen_cls_kwargs,
         )
 
+    @profile
     def train_step(
         self, sample, model, criterion, optimizer, update_num, ignore_grad=False
     ):

@@ -2,7 +2,7 @@ import torch
 from typing import Optional, Union, List
 import torch.nn as nn
 import torch.nn.functional as F
-# from line_profiler import profile
+from line_profiler import profile
 
 class MLP(nn.Module):
     def __init__(self, d_in, d_out, d_inner, n_layer, dropout):
@@ -188,6 +188,7 @@ class TemperatureScaler(BaseTemp):
                 ):
 
         super().__init__()
+        self.fixed_linspace = init_thresholds == "linspace" and mode == "absolute" and fixed_thresholds
         self.mode = mode
         self.degree = degree
         self.divide_by_temp = divide_by_temp
@@ -310,18 +311,20 @@ class TemperatureScaler(BaseTemp):
         if temp_mask.sum() == 0: #Return at least one threshold and two temps
             temp_mask[-1] = True  
         return thresholds[temp_mask], temps[nn.functional.pad(temp_mask, (1,0), value=True)]
-
+    
+    @profile
     def forward(self,
                 logits: torch.Tensor,
                 i: int = 0,
                 return_thresholds: bool = False,
-                row_indices: Optional[torch.Tensor] = None):
+                row_indices: Optional[torch.Tensor] = None,
+                plotting: bool = False,):
         
         thresholds = None
 
-        if self.normalize_first:
+        if self.normalize_first and not plotting:
             logits = torch.log_softmax(logits, dim=-1)
-        
+
         if self.context_dependent:
             assert self._cached_temps is not None and self._cached_thresholds is not None
             temp = (self._cached_temps[i] if row_indices is None else self._cached_temps[i][row_indices])
@@ -374,29 +377,36 @@ class TemperatureScaler(BaseTemp):
             # Get thresholds
             if self.mode == "absolute":
                 thresholds = self.thresholds[i] if self.thresholds[i] is not None else mlp_thr
-                thresholds, _ = torch.sort(thresholds)
-                masked_thresholds, masked_temp = self.mask_temp_and_threshold(thresholds, temp)
-                bin_ids = torch.searchsorted(masked_thresholds, logits)
-                logits = PiecewiseTemperatureFunction.apply_temperature(
-                    logits, masked_temp, masked_thresholds, bin_ids,
-                    use_no_grad_version=self.use_no_grad_version
-                )
+                if self.fixed_linspace:
+                    start = thresholds[0]
+                    step = thresholds[1] - thresholds[0]
+                    max_id = len(thresholds)
+                    # 2. Calculate bins mathematically instead of searching
+                    # torch.ceil mimics the default behavior of torch.searchsorted(right=False)
+                    bin_ids = torch.ceil((logits - start) / step).long()
+                    
+                    # 3. Clamp out-of-bounds values to match searchsorted limits
+                    bin_ids = torch.clamp(bin_ids, min=0, max=max_id)
+                else:
+                    thresholds, _ = torch.sort(thresholds)
+                    bin_ids = torch.searchsorted(thresholds, logits)
+    
             elif self.mode == "absolute_shifts":
                 shifts = self.shifts[i] if self.shifts[i] is not None else mlp_thr
                 shifts = F.softplus(shifts) if self.softplus_shifts else shifts
                 thresholds = PiecewiseTemperatureFunction.absolute_shifts(logits, shifts, self.shifts_topk)
-
+                bin_ids = torch.searchsorted(thresholds, logits)
             elif self.mode == "relative_shifts":
                 ratios = self.ratios[i] if self.ratios[i] is not None else mlp_thr
                 thresholds = PiecewiseTemperatureFunction.relative_shifts(logits, ratios)
-                
-            bin_ids = torch.searchsorted(thresholds, logits)
+                bin_ids = torch.searchsorted(thresholds, logits)
+            
             logits = PiecewiseTemperatureFunction.apply_temperature(
                 logits, temp, thresholds, bin_ids,
                 use_no_grad_version=self.use_no_grad_version
             )
-            if logits.isnan().any():
-                raise ValueError("NaN encountered in temperature scaling.")
+            # if logits.isnan().any():
+            #     raise ValueError("NaN encountered in temperature scaling.")
             return (logits, thresholds) if return_thresholds else logits
                 
     def set_context(self,
