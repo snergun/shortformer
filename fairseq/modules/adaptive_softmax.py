@@ -62,7 +62,7 @@ class AdaptiveSoftmax(nn.Module):
 
     def __init__(self, vocab_size, input_dim, cutoff, dropout, factor=4., adaptive_inputs=None, tie_proj=False,
                  q_noise=0, qn_block_size=8,
-                 temp_degree=None, temp_pieces=1, threshold_min=-30, threshold_max=30, fixed_thresholds=False,
+                 temp_degree=None, temp_pieces=1, threshold_min=-30, threshold_max=30, fixed_thresholds=False, init_temp="random",
                  plif_k=None, plif_t=20, plif_w_variance=1.0, plif_lr=0.02):
         super().__init__()
 
@@ -105,11 +105,13 @@ class AdaptiveSoftmax(nn.Module):
             print('Using piecewise temperature scaling with degree %d and %d pieces' % (temp_degree, temp_pieces))
             self.temperature_scaler = TemperatureScaler(
                 n_temp = len(cutoff),
+                init_temp=init_temp,
                 degree=temp_degree,
                 pieces=temp_pieces,
                 threshold_min=threshold_min, 
                 threshold_max=threshold_max, 
-                fixed_thresholds=fixed_thresholds)
+                fixed_thresholds=fixed_thresholds,
+                softplus_temp=True)
         elif plif_k is not None and plif_k > 1:
             print('Using PLIF temperature scaling with k=%d, t=%.2f, w_variance=%.2f, lr=%.4f' % (plif_k, plif_t, plif_w_variance, plif_lr))
             self.temperature_scaler = nn.ModuleList([

@@ -1,8 +1,8 @@
-kernprof -lv train.py > profile_with_temp_fixed_thresholds.txt \
+python train.py \
     data/wikitext-103 \
     --task language_modeling \
     --arch transformer_lm_wiki103 \
-    --max-update 10 \
+    --max-update 1000 \
     --max-lr 1.0 \
     --t-mult 2 \
     --lr-period-updates 10 \
@@ -15,7 +15,7 @@ kernprof -lv train.py > profile_with_temp_fixed_thresholds.txt \
     --lr 0.0001 \
     --clip-norm 0.1 \
     --criterion adaptive_loss \
-    --max-tokens 9216 \
+    --max-tokens 4608 \
     --update-freq 1 \
     --seed 1 \
     --sample-break-mode none \
@@ -26,8 +26,13 @@ kernprof -lv train.py > profile_with_temp_fixed_thresholds.txt \
     --log-interval 5 \
     --keep-last-epochs 1 \
     --no-save \
-    --plif-k 2 \
-    --plif-t 20 \
-    --plif-w-variance 1.0 \
-    --plif-lr 0.02 \
+    --temp-degree 1 \
+    --temp-pieces 10 \
+    --fixed-thresholds \
+    # --plif-k 10 \
+    # --plif-t 30 \
+    # --plif-w-variance 1.0 \
+    # --plif-lr 0.02 \
+
+
 

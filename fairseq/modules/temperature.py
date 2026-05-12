@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 import torch.nn as nn
 import torch.nn.functional as F
 from line_profiler import profile
-
+import math
 class MLP(nn.Module):
     def __init__(self, d_in, d_out, d_inner, n_layer, dropout):
         super().__init__()
@@ -166,7 +166,7 @@ class TemperatureScaler(BaseTemp):
                 ratios: Optional[List[torch.Tensor]] = None, # (pieces,)
                 shifts: Optional[List[torch.Tensor]] = None, # (pieces-1,)
                 shifts_topk: int = 1,
-                init_temp: str = "ones", # "ones" or "random",
+                init_temp: str = "ones", # "ones" or "random", or "plif"
                 init_thresholds: str = "linspace", # (pieces - 1,)
                 threshold_min: float = -30.0,
                 threshold_max: float = 30.0,
@@ -238,6 +238,12 @@ class TemperatureScaler(BaseTemp):
             
             elif init_temp == "random":
                 temp_init = torch.rand(p, dtype=torch.float32) *0.5 + 1.0
+
+            elif init_temp == "plif":
+                # Follow Ganea
+                assert self.softplus_temp, "PLIF initialization only makes sense if using softplus temperature"
+                torch.rand(p, dtype=torch.float32)  * 1.0 + math.log(math.exp(1) - 1)
+
             else:
                 raise ValueError(f"Unknown init_temp: {init_temp} and temp is None.")
             if self.softplus_temp:
