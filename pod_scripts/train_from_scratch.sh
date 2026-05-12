@@ -26,7 +26,8 @@ kernprof -lv train.py > profile_with_temp_fixed_thresholds.txt \
     --log-interval 5 \
     --keep-last-epochs 1 \
     --no-save \
-    --temp-degree 1 \
-    --temp-pieces 10 \
-    --fixed-thresholds \
+    --plif-k 2 \
+    --plif-t 20 \
+    --plif-w-variance 1.0 \
+    --plif-lr 0.02 \
 

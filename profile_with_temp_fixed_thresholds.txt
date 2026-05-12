@@ -1,169 +1,463 @@
-2026-05-04 20:51:28 | INFO | fairseq_cli.train | Namespace(activation_dropout=0.1, activation_fn='relu', adaptive_input=True, adaptive_input_cutoff='20000,60000', adaptive_input_factor=4, adaptive_softmax_cutoff='20000,60000', adaptive_softmax_dropout=0.2, adaptive_softmax_factor=4, add_bos_token=False, all_gather_list_size=16384, arch='transformer_lm_wiki103', attention_dropout=0.1, best_checkpoint_metric='loss', bf16=False, bpe=None, broadcast_buffers=False, bucket_cap_mb=25, char_embedder_highway_layers=2, character_embedding_dim=4, character_embeddings=False, character_filters='[(1, 64), (2, 128), (3, 192), (4, 256), (5, 256), (6, 256), (7, 256)]', checkpoint_suffix='', clip_norm=0.1, cpu=False, criterion='adaptive_loss', curriculum=0, data='data/wikitext-103', data_buffer_size=10, dataset_impl=None, ddp_backend='no_c10d', decoder_attention_heads=8, decoder_embed_dim=1024, decoder_ffn_embed_dim=4096, decoder_input_dim=1024, decoder_layerdrop=0, decoder_layers=16, decoder_layers_to_keep=None, decoder_learned_pos=False, decoder_normalize_before=True, decoder_output_dim=1024, device_id=0, disable_validation=False, distributed_backend='nccl', distributed_init_method=None, distributed_no_spawn=False, distributed_num_procs=1, distributed_port=-1, distributed_rank=0, distributed_world_size=1, distributed_wrapper='DDP', dropout=0.3, empty_cache_freq=0, fast_stat_sync=False, find_unused_parameters=False, finetune_from_model=None, fix_batches_to_gpus=False, fixed_thresholds=True, fixed_validation_seed=None, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, future_target=False, keep_best_checkpoints=-1, keep_interval_updates=-1, keep_last_epochs=1, layernorm_embedding=False, localsgd_frequency=3, log_format=None, log_interval=5, lr=[0.0001], lr_period_updates=10.0, lr_scheduler='cosine', lr_shrink=0.75, max_epoch=0, max_lr=1.0, max_sentences=None, max_sentences_valid=None, max_target_positions=None, max_tokens=9216, max_tokens_valid=9216, max_update=10, maximize_best_checkpoint_metric=False, memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, min_lr=1e-09, model_parallel_size=1, momentum=0.99, no_decoder_final_norm=True, no_epoch_checkpoints=False, no_last_checkpoints=False, no_progress_bar=False, no_save=True, no_save_optimizer_state=False, no_scale_embedding=False, no_seed_provided=False, no_token_positional_embeddings=False, nprocs_per_node=1, num_workers=1, optimizer='nag', optimizer_overrides='{}', output_dictionary_size=-1, past_target=False, patience=-1, pipeline_balance=None, pipeline_checkpoint='never', pipeline_chunks=None, pipeline_devices=None, pipeline_model_parallel=False, profile=False, quant_noise_pq=0, quant_noise_pq_block_size=8, quant_noise_scalar=0, quantization_config_path=None, required_batch_size_multiple=1, reset_dataloader=False, reset_lr_scheduler=False, reset_meters=False, reset_optimizer=False, restore_file='checkpoint_last.pt', sample_break_mode='none', save_dir='checkpoints', save_interval=1, save_interval_updates=0, scoring='bleu', seed=1, self_target=False, sentence_avg=False, share_decoder_input_output_embed=False, shorten_data_split_list='', shorten_method='none', skip_invalid_size_inputs_valid_test=True, sliding_inf=-1, slowmo_algorithm='LocalSGD', slowmo_momentum=None, stop_time_hours=0, t_mult=2.0, task='language_modeling', temp_degree=1, temp_pieces=10, tensorboard_logdir='', threshold_loss_scale=None, threshold_max=30, threshold_min=-30, tie_adaptive_proj=True, tie_adaptive_weights=True, tokenizer=None, tokens_from_prev=0, tokens_per_sample=128, tpu=False, train_subset='train', update_freq=[1], use_bmuf=False, user_dir=None, valid_subset='valid', validate_after_updates=0, validate_interval=1, validate_interval_updates=0, warmup_init_lr=1e-07, warmup_updates=0, weight_decay=0.0, zero_sharding='none')
-2026-05-04 20:51:28 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
-2026-05-04 20:51:28 | INFO | fairseq.data.data_utils | loaded 3760 examples from: data/wikitext-103/valid
-2026-05-04 20:51:30 | INFO | fairseq_cli.train | task: language_modeling (LanguageModelingTask)
-2026-05-04 20:51:30 | INFO | fairseq_cli.train | model: transformer_lm_wiki103 (TransformerLanguageModel)
-2026-05-04 20:51:30 | INFO | fairseq_cli.train | criterion: adaptive_loss (AdaptiveLoss)
-2026-05-04 20:51:30 | INFO | fairseq_cli.train | num. model params: 246933561 (num. trained: 246933534)
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.0.weight <- decoder.adaptive_softmax.head.word_proj.weight
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.embed_tokens.embeddings.1.1.bias
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.embed_tokens.embeddings.2.1.bias
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.head.class_proj.bias
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.shifts.0
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.shifts.1
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.shifts.2
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.ratios.0
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.ratios.1
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.temperature_scaler.ratios.2
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.1.0.weight <- decoder.adaptive_softmax.tail.0.2.weight
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.1.1.weight <- decoder.adaptive_softmax.tail.0.0.weight
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.2.0.weight <- decoder.adaptive_softmax.tail.1.2.weight
-2026-05-04 20:51:34 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.2.1.weight <- decoder.adaptive_softmax.tail.1.0.weight
-2026-05-04 20:51:34 | INFO | fairseq.utils | ***********************CUDA enviroments for all 1 workers***********************
-2026-05-04 20:51:34 | INFO | fairseq.utils | rank   0: capabilities =  8.9  ; total memory = 44.394 GB ; name = NVIDIA L40                              
-2026-05-04 20:51:34 | INFO | fairseq.utils | ***********************CUDA enviroments for all 1 workers***********************
-2026-05-04 20:51:34 | INFO | fairseq_cli.train | training on 1 devices (GPUs/TPUs)
-2026-05-04 20:51:34 | INFO | fairseq_cli.train | max tokens per GPU = 9216 and max sentences per GPU = None
-2026-05-04 20:51:34 | INFO | fairseq.trainer | no existing checkpoint found checkpoints/checkpoint_last.pt
-2026-05-04 20:51:34 | INFO | fairseq.trainer | loading train data for epoch 1
-2026-05-04 20:51:34 | INFO | fairseq.data.data_utils | loaded 1801350 examples from: data/wikitext-103/train
-2026-05-04 20:51:35 | INFO | fairseq.trainer | NOTE: your device may support faster training with --fp16
-2026-05-04 20:51:35 | INFO | fairseq.trainer | begin training epoch 1
+2026-05-12 17:55:45 | INFO | fairseq_cli.train | Namespace(activation_dropout=0.1, activation_fn='relu', adaptive_input=True, adaptive_input_cutoff='20000,60000', adaptive_input_factor=4, adaptive_softmax_cutoff='20000,60000', adaptive_softmax_dropout=0.2, adaptive_softmax_factor=4, add_bos_token=False, all_gather_list_size=16384, arch='transformer_lm_wiki103', attention_dropout=0.1, best_checkpoint_metric='loss', bf16=False, bpe=None, broadcast_buffers=False, bucket_cap_mb=25, char_embedder_highway_layers=2, character_embedding_dim=4, character_embeddings=False, character_filters='[(1, 64), (2, 128), (3, 192), (4, 256), (5, 256), (6, 256), (7, 256)]', checkpoint_suffix='', clip_norm=0.1, cpu=False, criterion='adaptive_loss', curriculum=0, data='data/wikitext-103', data_buffer_size=10, dataset_impl=None, ddp_backend='no_c10d', decoder_attention_heads=8, decoder_embed_dim=1024, decoder_ffn_embed_dim=4096, decoder_input_dim=1024, decoder_layerdrop=0, decoder_layers=16, decoder_layers_to_keep=None, decoder_learned_pos=False, decoder_normalize_before=True, decoder_output_dim=1024, device_id=0, disable_validation=False, distributed_backend='nccl', distributed_init_method=None, distributed_no_spawn=False, distributed_num_procs=0, distributed_port=-1, distributed_rank=0, distributed_world_size=1, distributed_wrapper='DDP', dropout=0.3, empty_cache_freq=0, fast_stat_sync=False, find_unused_parameters=False, finetune_from_model=None, fix_batches_to_gpus=False, fixed_thresholds=False, fixed_validation_seed=None, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, future_target=False, keep_best_checkpoints=-1, keep_interval_updates=-1, keep_last_epochs=1, layernorm_embedding=False, localsgd_frequency=3, log_format=None, log_interval=5, lr=[0.0001], lr_period_updates=10.0, lr_scheduler='cosine', lr_shrink=0.75, max_epoch=0, max_lr=1.0, max_sentences=None, max_sentences_valid=None, max_target_positions=None, max_tokens=9216, max_tokens_valid=9216, max_update=10, maximize_best_checkpoint_metric=False, memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, min_lr=1e-09, model_parallel_size=1, momentum=0.99, no_decoder_final_norm=True, no_epoch_checkpoints=False, no_last_checkpoints=False, no_progress_bar=False, no_save=True, no_save_optimizer_state=False, no_scale_embedding=False, no_seed_provided=False, no_token_positional_embeddings=False, nprocs_per_node=1, num_workers=1, optimizer='nag', optimizer_overrides='{}', output_dictionary_size=-1, past_target=False, patience=-1, pipeline_balance=None, pipeline_checkpoint='never', pipeline_chunks=None, pipeline_devices=None, pipeline_model_parallel=False, plif_k=2, plif_lr=0.02, plif_t=20.0, plif_w_variance=1.0, profile=False, quant_noise_pq=0, quant_noise_pq_block_size=8, quant_noise_scalar=0, quantization_config_path=None, required_batch_size_multiple=1, reset_dataloader=False, reset_lr_scheduler=False, reset_meters=False, reset_optimizer=False, restore_file='checkpoint_last.pt', sample_break_mode='none', save_dir='checkpoints', save_interval=1, save_interval_updates=0, scoring='bleu', seed=1, self_target=False, sentence_avg=False, share_decoder_input_output_embed=False, shorten_data_split_list='', shorten_method='none', skip_invalid_size_inputs_valid_test=True, sliding_inf=-1, slowmo_algorithm='LocalSGD', slowmo_momentum=None, stop_time_hours=0, t_mult=2.0, task='language_modeling', temp_degree=None, temp_pieces=None, tensorboard_logdir='', threshold_loss_scale=None, threshold_max=30, threshold_min=-30, tie_adaptive_proj=True, tie_adaptive_weights=True, tokenizer=None, tokens_from_prev=0, tokens_per_sample=128, tpu=False, train_subset='train', update_freq=[1], use_bmuf=False, user_dir=None, valid_subset='valid', validate_after_updates=0, validate_interval=1, validate_interval_updates=0, warmup_init_lr=1e-07, warmup_updates=0, weight_decay=0.0, zero_sharding='none')
+2026-05-12 17:55:46 | INFO | fairseq.tasks.language_modeling | dictionary: 267744 types
+2026-05-12 17:55:46 | INFO | fairseq.data.data_utils | loaded 3760 examples from: data/wikitext-103/valid
+Using PLIF temperature scaling with k=2, t=20.00, w_variance=1.00, lr=0.0200
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | TransformerLanguageModel(
+  (decoder): TransformerDecoder(
+    (dropout_module): FairseqDropout()
+    (embed_tokens): AdaptiveInput(
+      (embeddings): ModuleList(
+        (0): Sequential(
+          (0): Embedding(20000, 1024, padding_idx=1)
+          (1): Linear(in_features=1024, out_features=1024, bias=False)
+        )
+        (1): Sequential(
+          (0): Embedding(40000, 256)
+          (1): Linear(in_features=256, out_features=1024, bias=False)
+        )
+        (2): Sequential(
+          (0): Embedding(207744, 64)
+          (1): Linear(in_features=64, out_features=1024, bias=False)
+        )
+      )
+    )
+    (embed_positions): SinusoidalPositionalEmbedding()
+    (layers): ModuleList(
+      (0): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (1): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (2): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (3): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (4): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (5): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (6): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (7): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (8): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (9): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (10): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (11): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (12): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (13): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (14): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+      (15): TransformerDecoderLayer(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (v_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (q_proj): Linear(in_features=1024, out_features=1024, bias=True)
+          (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+        (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+        (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      )
+    )
+    (adaptive_softmax): AdaptiveSoftmax(
+      (dropout_module): FairseqDropout()
+      (lsm): LogSoftmax(dim=1)
+      (head): TiedHeadModule(
+        (word_proj): TiedLinear()
+        (class_proj): Linear(in_features=1024, out_features=2, bias=False)
+      )
+      (tail): ModuleList(
+        (0): Sequential(
+          (0): TiedLinear()
+          (1): Dropout(p=0.2, inplace=False)
+          (2): TiedLinear()
+        )
+        (1): Sequential(
+          (0): TiedLinear()
+          (1): Dropout(p=0.2, inplace=False)
+          (2): TiedLinear()
+        )
+      )
+      (temperature_scaler): ModuleList(
+        (0): Plif()
+        (1): Plif()
+        (2): Plif()
+      )
+    )
+  )
+)
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | task: language_modeling (LanguageModelingTask)
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | model: transformer_lm_wiki103 (TransformerLanguageModel)
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | criterion: adaptive_loss (AdaptiveLoss)
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | num. model params: 246933510 (num. trained: 246933510)
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.0.weight <- decoder.adaptive_softmax.head.word_proj.weight
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.embed_tokens.embeddings.1.1.bias
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.embed_tokens.embeddings.2.1.bias
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.0.1.bias <- decoder.adaptive_softmax.head.class_proj.bias
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.1.0.weight <- decoder.adaptive_softmax.tail.0.2.weight
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.1.1.weight <- decoder.adaptive_softmax.tail.0.0.weight
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.2.0.weight <- decoder.adaptive_softmax.tail.1.2.weight
+2026-05-12 17:55:48 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.embeddings.2.1.weight <- decoder.adaptive_softmax.tail.1.0.weight
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | training on 1 devices (GPUs/TPUs)
+2026-05-12 17:55:48 | INFO | fairseq_cli.train | max tokens per GPU = 9216 and max sentences per GPU = None
+2026-05-12 17:55:48 | INFO | fairseq.trainer | no existing checkpoint found checkpoints/checkpoint_last.pt
+2026-05-12 17:55:48 | INFO | fairseq.trainer | loading train data for epoch 1
+2026-05-12 17:55:49 | INFO | fairseq.data.data_utils | loaded 1801350 examples from: data/wikitext-103/train
+2026-05-12 17:55:49 | INFO | fairseq.trainer | begin training epoch 1
 Wrote profile results to 'train.py.lprof'
 Timer unit: 1e-06 s
 
-Total time: 0.0589361 s
+Total time: 0 s
 File: /home/jovyan/shortformer/fairseq/modules/temperature.py
-Function: forward at line 321
+Function: forward at line 315
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-   321                                               @profile
-   322                                               def forward(self,
-   323                                                           logits: torch.Tensor,
-   324                                                           i: int = 0,
-   325                                                           return_thresholds: bool = False,
-   326                                                           row_indices: Optional[torch.Tensor] = None,
-   327                                                           plotting: bool = False,):
-   328                                                   
-   329         1          0.6      0.6      0.0          thresholds = None
-   330                                           
-   331         1          0.9      0.9      0.0          if self.normalize_first and not plotting:
-   332                                                       logits = torch.log_softmax(logits, dim=-1)
-   333                                           
-   334         1          0.8      0.8      0.0          if self.context_dependent:
-   335                                                       assert self._cached_temps is not None and self._cached_thresholds is not None
-   336                                                       temp = (self._cached_temps[i] if row_indices is None else self._cached_temps[i][row_indices])
-   337                                                       mlp_thr = (self._cached_thresholds[i] if row_indices is None else self._cached_thresholds[i][row_indices])
-   338                                                   
-   339         1          1.2      1.2      0.0          elif self.logit_dependent:
-   340                                                       logit_features = self.extract_logit_features(logits, i, row_indices) # (B, num_features)
-   341                                                       out = self.mlps[i](logit_features) # (B, d_out)
-   342                                                       if self.pieces[i] == 1:
-   343                                                           # For single piece, output is just temperature
-   344                                                           temp = out  # (B, 1)
-   345                                                           mlp_thr = None
-   346                                                       else:
-   347                                                           # For multiple pieces, split into temp and thresholds
-   348                                                           temp = out[:, : self.pieces[i]] # (B, pieces)
-   349                                                           mlp_thr = out[:, self.pieces[i]:] # (B, pieces - 1) or # (B, pieces)
-   350                                           
-   351         1         23.9     23.9      0.0          if self.temperature[i] is not None:
-   352         1          5.9      5.9      0.0              temp = self.temperature[i]
-   353         1          0.5      0.5      0.0              if self.softplus_temp:
-   354                                                           temp = F.softplus(temp)
-   355                                                   
-   356         1          1.0      1.0      0.0          if self.pieces[i] == 0:
-   357                                                       # No temperature scaling
-   358                                                       return logits
-   359                                                   
-   360         1          0.4      0.4      0.0          elif self.pieces[i] == 1:
-   361                                                       # For single-piece, apply simple temperature scaling
-   362                                                       if temp.dim() == 2:
-   363                                                           # Batch-dependent temperature from MLP: (B, 1)
-   364                                                           return logits * temp.squeeze(-1).unsqueeze(-1) if not self.divide_by_temp else logits / temp.squeeze(-1).unsqueeze(-1)
-   365                                                       else:
-   366                                                           # Fixed temperature parameter: (1,)
-   367                                                           if self.divide_by_temp:
-   368                                                               if self.degree > 1: 
-   369                                                                   logits_poly = torch.pow(logits.unsqueeze(-1), torch.arange(1, self.degree, device=logits.device).float()).clamp(max = 1e3, min=-1e3) # (B, V, degree-1)
-   370                                                                   divide_temp = temp + (logits_poly * self.coeffs[i]).sum(dim=-1, keepdims=True)
-   371                                                               else:
-   372                                                                   divide_temp = temp
-   373                                                               out = (logits.unsqueeze(-1) / divide_temp).squeeze(-1)
-   374                                                           else:
-   375                                                               out = logits * temp
-   376                                                               if self.degree > 1:
-   377                                                                   logits_poly = torch.pow(logits.unsqueeze(-1), torch.arange(2, self.degree+1, device=logits.device).float()).clamp(max = 1e3, min=-1e3)  # (B, V, degree-1)
-   378                                                                   out += (logits_poly * self.coeffs[i]).sum(dim=-1)
-   379                                                           if return_thresholds:
-   380                                                               return out, None
-   381                                                           return out
-   382                                                   else:
-   383                                                       # Get thresholds
-   384         1          3.4      3.4      0.0              if self.mode == "absolute":
-   385         1         10.3     10.3      0.0                  thresholds = self.thresholds[i] if self.thresholds[i] is not None else mlp_thr
-   386         1          0.7      0.7      0.0                  if self.fixed_linspace:
-   387         1      42802.6  42802.6     72.6                      bin_ids = get_bin_ids_fused(logits, thresholds[0], thresholds[1] - thresholds[0], len(thresholds))
-   388                                                           else:
-   389                                                               thresholds, _ = torch.sort(thresholds)
-   390                                                               bin_ids = torch.searchsorted(thresholds, logits)
-   391                                               
-   392                                                       elif self.mode == "absolute_shifts":
-   393                                                           shifts = self.shifts[i] if self.shifts[i] is not None else mlp_thr
-   394                                                           shifts = F.softplus(shifts) if self.softplus_shifts else shifts
-   395                                                           thresholds = PiecewiseTemperatureFunction.absolute_shifts(logits, shifts, self.shifts_topk)
-   396                                                           bin_ids = torch.searchsorted(thresholds, logits)
-   397                                                       elif self.mode == "relative_shifts":
-   398                                                           ratios = self.ratios[i] if self.ratios[i] is not None else mlp_thr
-   399                                                           thresholds = PiecewiseTemperatureFunction.relative_shifts(logits, ratios)
-   400                                                           bin_ids = torch.searchsorted(thresholds, logits)
-   401                                                       
-   402         2      16081.7   8040.9     27.3              logits = PiecewiseTemperatureFunction.apply_temperature(
-   403         1          0.6      0.6      0.0                  logits, temp, thresholds, bin_ids,
-   404         1          1.5      1.5      0.0                  use_no_grad_version=self.use_no_grad_version
-   405                                                       )
-   406                                                       # if logits.isnan().any():
-   407                                                       #     raise ValueError("NaN encountered in temperature scaling.")
-   408                                                       return (logits, thresholds) if return_thresholds else logits
+   315                                               @profile
+   316                                               def forward(self,
+   317                                                           logits: torch.Tensor,
+   318                                                           i: int = 0,
+   319                                                           return_thresholds: bool = False,
+   320                                                           row_indices: Optional[torch.Tensor] = None,
+   321                                                           plotting: bool = False,):
+   322                                                   
+   323                                                   thresholds = None
+   324                                           
+   325                                                   if self.normalize_first and not plotting:
+   326                                                       logits = torch.log_softmax(logits, dim=-1)
+   327                                           
+   328                                                   if self.context_dependent:
+   329                                                       assert self._cached_temps is not None and self._cached_thresholds is not None
+   330                                                       temp = (self._cached_temps[i] if row_indices is None else self._cached_temps[i][row_indices])
+   331                                                       mlp_thr = (self._cached_thresholds[i] if row_indices is None else self._cached_thresholds[i][row_indices])
+   332                                                   
+   333                                                   elif self.logit_dependent:
+   334                                                       logit_features = self.extract_logit_features(logits, i, row_indices) # (B, num_features)
+   335                                                       out = self.mlps[i](logit_features) # (B, d_out)
+   336                                                       if self.pieces[i] == 1:
+   337                                                           # For single piece, output is just temperature
+   338                                                           temp = out  # (B, 1)
+   339                                                           mlp_thr = None
+   340                                                       else:
+   341                                                           # For multiple pieces, split into temp and thresholds
+   342                                                           temp = out[:, : self.pieces[i]] # (B, pieces)
+   343                                                           mlp_thr = out[:, self.pieces[i]:] # (B, pieces - 1) or # (B, pieces)
+   344                                           
+   345                                                   if self.temperature[i] is not None:
+   346                                                       temp = self.temperature[i]
+   347                                                       if self.softplus_temp:
+   348                                                           temp = F.softplus(temp)
+   349                                                   
+   350                                                   if self.pieces[i] == 0:
+   351                                                       # No temperature scaling
+   352                                                       return logits
+   353                                                   
+   354                                                   elif self.pieces[i] == 1:
+   355                                                       # For single-piece, apply simple temperature scaling
+   356                                                       if temp.dim() == 2:
+   357                                                           # Batch-dependent temperature from MLP: (B, 1)
+   358                                                           return logits * temp.squeeze(-1).unsqueeze(-1) if not self.divide_by_temp else logits / temp.squeeze(-1).unsqueeze(-1)
+   359                                                       else:
+   360                                                           # Fixed temperature parameter: (1,)
+   361                                                           if self.divide_by_temp:
+   362                                                               if self.degree > 1: 
+   363                                                                   logits_poly = torch.pow(logits.unsqueeze(-1), torch.arange(1, self.degree, device=logits.device).float()).clamp(max = 1e3, min=-1e3) # (B, V, degree-1)
+   364                                                                   divide_temp = temp + (logits_poly * self.coeffs[i]).sum(dim=-1, keepdims=True)
+   365                                                               else:
+   366                                                                   divide_temp = temp
+   367                                                               out = (logits.unsqueeze(-1) / divide_temp).squeeze(-1)
+   368                                                           else:
+   369                                                               out = logits * temp
+   370                                                               if self.degree > 1:
+   371                                                                   logits_poly = torch.pow(logits.unsqueeze(-1), torch.arange(2, self.degree+1, device=logits.device).float()).clamp(max = 1e3, min=-1e3)  # (B, V, degree-1)
+   372                                                                   out += (logits_poly * self.coeffs[i]).sum(dim=-1)
+   373                                                           if return_thresholds:
+   374                                                               return out, None
+   375                                                           return out
+   376                                                   else:
+   377                                                       # Get thresholds
+   378                                                       if self.mode == "absolute":
+   379                                                           thresholds = self.thresholds[i] if self.thresholds[i] is not None else mlp_thr
+   380                                                           if self.fixed_linspace:
+   381                                                               start = thresholds[0]
+   382                                                               step = thresholds[1] - thresholds[0]
+   383                                                               max_id = len(thresholds)
+   384                                                               # 2. Calculate bins mathematically instead of searching
+   385                                                               # torch.ceil mimics the default behavior of torch.searchsorted(right=False)
+   386                                                               bin_ids = torch.ceil((logits - start) / step).long()
+   387                                                               
+   388                                                               # 3. Clamp out-of-bounds values to match searchsorted limits
+   389                                                               bin_ids = torch.clamp(bin_ids, min=0, max=max_id)
+   390                                                           else:
+   391                                                               thresholds, _ = torch.sort(thresholds)
+   392                                                               bin_ids = torch.searchsorted(thresholds, logits)
+   393                                               
+   394                                                       elif self.mode == "absolute_shifts":
+   395                                                           shifts = self.shifts[i] if self.shifts[i] is not None else mlp_thr
+   396                                                           shifts = F.softplus(shifts) if self.softplus_shifts else shifts
+   397                                                           thresholds = PiecewiseTemperatureFunction.absolute_shifts(logits, shifts, self.shifts_topk)
+   398                                                           bin_ids = torch.searchsorted(thresholds, logits)
+   399                                                       elif self.mode == "relative_shifts":
+   400                                                           ratios = self.ratios[i] if self.ratios[i] is not None else mlp_thr
+   401                                                           thresholds = PiecewiseTemperatureFunction.relative_shifts(logits, ratios)
+   402                                                           bin_ids = torch.searchsorted(thresholds, logits)
+   403                                                       
+   404                                                       logits = PiecewiseTemperatureFunction.apply_temperature(
+   405                                                           logits, temp, thresholds, bin_ids,
+   406                                                           use_no_grad_version=self.use_no_grad_version
+   407                                                       )
+   408                                                       # if logits.isnan().any():
+   409                                                       #     raise ValueError("NaN encountered in temperature scaling.")
+   410                                                       return (logits, thresholds) if return_thresholds else logits
 
-Total time: 0.113439 s
+Total time: 0 s
 File: /home/jovyan/shortformer/fairseq/modules/adaptive_softmax.py
-Function: forward at line 170
+Function: forward at line 178
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-   170                                               @profile
-   171                                               def forward(self, input, target):
-   172                                                   """
-   173                                                   Args:
-   174                                                       input: (b x t x d)
-   175                                                       target: (b x t)
-   176                                                   Returns:
-   177                                                       2 lists: output for each cutoff section and new targets by cut off
-   178                                                   """
-   179                                           
-   180         1          6.5      6.5      0.0          input = input.contiguous().view(-1, input.size(-1))
-   181         1         32.2     32.2      0.0          input = self.dropout_module(input)
-   182                                           
-   183         1      54064.9  54064.9     47.7          new_target, target_idxs = self.adapt_target(target)
-   184         1        324.3    324.3      0.3          head_output = self.head(input)
-   185         1          4.2      4.2      0.0          if self.temperature_scaler is not None:
-   186         1      59007.0  59007.0     52.0              head_output = self.temperature_scaler(head_output, 0)
-   187                                                   output = [head_output]
-   188                                           
-   189                                                   for i in range(len(target_idxs)):
-   190                                                       if target_idxs[i] is not None:
-   191                                                           cluster_out = self.tail[i](input.index_select(0, target_idxs[i]))
-   192                                                           if self.temperature_scaler is not None:
-   193                                                               cluster_out = self.temperature_scaler(cluster_out, i + 1)
-   194                                                           output.append(cluster_out)
-   195                                                       else:
-   196                                                           output.append(None)
-   197                                           
-   198                                                   return output, new_target
+   178                                               @profile
+   179                                               def forward(self, input, target):
+   180                                                   """
+   181                                                   Args:
+   182                                                       input: (b x t x d)
+   183                                                       target: (b x t)
+   184                                                   Returns:
+   185                                                       2 lists: output for each cutoff section and new targets by cut off
+   186                                                   """
+   187                                           
+   188                                                   input = input.contiguous().view(-1, input.size(-1))
+   189                                                   input = self.dropout_module(input)
+   190                                           
+   191                                                   new_target, target_idxs = self.adapt_target(target)
+   192                                                   head_output = self.head(input)
+   193                                                   if self.temperature_scaler is not None:
+   194                                                       if isinstance(self.temperature_scaler, TemperatureScaler):
+   195                                                           head_output = self.temperature_scaler(head_output, 0)
+   196                                                       else:
+   197                                                           head_output = self.temperature_scaler[0](head_output)
+   198                                                   output = [head_output]
+   199                                           
+   200                                                   for i in range(len(target_idxs)):
+   201                                                       if target_idxs[i] is not None:
+   202                                                           cluster_out = self.tail[i](input.index_select(0, target_idxs[i]))
+   203                                                           if self.temperature_scaler is not None:
+   204                                                               if isinstance(self.temperature_scaler, TemperatureScaler):
+   205                                                                   cluster_out = self.temperature_scaler(cluster_out, i + 1)
+   206                                                               else:
+   207                                                                   cluster_out = self.temperature_scaler[i + 1](cluster_out)
+   208                                                           output.append(cluster_out)
+   209                                                       else:
+   210                                                           output.append(None)
+   211                                           
+   212                                                   return output, new_target
 
-Total time: 0.31795 s
+Total time: 5.04087 s
 File: /home/jovyan/shortformer/fairseq/criterions/adaptive_loss.py
 Function: forward at line 35
 
@@ -179,18 +473,18 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     42                                                   3) logging outputs to display while training
     43                                                   """
     44                                           
-    45         1         10.4     10.4      0.0          assert hasattr(model.decoder, 'adaptive_softmax') and model.decoder.adaptive_softmax is not None
-    46         1          3.5      3.5      0.0          adaptive_softmax = model.decoder.adaptive_softmax
+    45         1         12.7     12.7      0.0          assert hasattr(model.decoder, 'adaptive_softmax') and model.decoder.adaptive_softmax is not None
+    46         1          3.4      3.4      0.0          adaptive_softmax = model.decoder.adaptive_softmax
     47                                           
-    48         1     204437.7 204437.7     64.3          net_output = model(**sample['net_input'])
-    49         1         10.9     10.9      0.0          orig_target = model.get_targets(sample, net_output)
+    48         1    5040857.3 5.04e+06    100.0          net_output = model(**sample['net_input'])
+    49                                                   orig_target = model.get_targets(sample, net_output)
     50                                           
-    51         1          1.4      1.4      0.0          nsentences = orig_target.size(0)
-    52         1          4.2      4.2      0.0          orig_target = orig_target.view(-1)
+    51                                                   nsentences = orig_target.size(0)
+    52                                                   orig_target = orig_target.view(-1)
     53                                           
-    54         1          0.5      0.5      0.0          bsz = orig_target.size(0)
+    54                                                   bsz = orig_target.size(0)
     55                                           
-    56         1     113481.4 113481.4     35.7          logits, target = adaptive_softmax(net_output[0], orig_target)
+    56                                                   logits, target = adaptive_softmax(net_output[0], orig_target)
     57                                                   assert len(target) == len(logits)
     58                                           
     59                                                   loss = net_output[0].new(1 if reduce else bsz).zero_()
@@ -216,7 +510,7 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     79                                                   }
     80                                                   return loss, sample_size, logging_output
 
-Total time: 0.320734 s
+Total time: 5.04369 s
 File: /home/jovyan/shortformer/fairseq/tasks/fairseq_task.py
 Function: train_step at line 383
 
@@ -246,10 +540,10 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    404                                                             gradient
    405                                                           - logging outputs to display while training
    406                                                   """
-   407         1       1225.8   1225.8      0.4          model.train()
-   408         1       1352.3   1352.3      0.4          model.set_num_updates(update_num)
-   409         1        106.6    106.6      0.0          with torch.autograd.profiler.record_function("forward"):
-   410         1     318048.9 318048.9     99.2              loss, sample_size, logging_output = criterion(model, sample)
+   407         1       1150.2   1150.2      0.0          model.train()
+   408         1       1339.7   1339.7      0.0          model.set_num_updates(update_num)
+   409         1        100.8    100.8      0.0          with torch.autograd.profiler.record_function("forward"):
+   410         1    5041103.7 5.04e+06     99.9              loss, sample_size, logging_output = criterion(model, sample)
    411                                                   if ignore_grad:
    412                                                       loss *= 0
    413                                                   with torch.autograd.profiler.record_function("backward"):

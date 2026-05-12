@@ -8,6 +8,7 @@ class Plif(nn.Module):
     # base_interval: defines the logits range on which the monotonic layer
     # will be applied
     def __init__(self, K, T, w_variance):
+        super(Plif, self).__init__()
         self.T = T
         self.K = K
         self.plif_w = nn.Parameter(
