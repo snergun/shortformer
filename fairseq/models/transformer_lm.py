@@ -135,7 +135,15 @@ class TransformerLanguageModel(FairseqLanguageModel):
                             help='maximum threshold for piecewise temperature scaling (default: None, no piecewise temperature scaling)')
         parser.add_argument('--fixed-thresholds', action='store_true',
                             help='if set, uses fixed thresholds for piecewise temperature scaling instead of learnable thresholds')
-        
+        # PLIF arguments
+        parser.add_argument('--plif-k', type=int, metavar='N',
+                            help='number of linear pieces for PLIF softmax')
+        parser.add_argument('--plif-t', type=float, metavar='D',
+                            help='range of logits for PLIF softmax will be [-T, T]')
+        parser.add_argument('--plif-w-variance', type=float, metavar='D',
+                            help='initial variance of the weights for PLIF softmax')
+        parser.add_argument('--plif-lr', type=float, metavar='D',
+                            help='learning rate for PLIF softmax')
     @classmethod
     def build_model(cls, args, task):
         """Build a new model instance."""
@@ -242,6 +250,13 @@ def base_lm_architecture(args):
     args.threshold_max = getattr(args, 'threshold_max', 30)
     args.temp_degree = getattr(args, 'temp_degree', None)
     args.temp_pieces = getattr(args, 'temp_pieces', None)
+
+    # PLIF arguments 
+    args.plif_k = getattr(args, 'plif_k', None)
+    args.plif_t = getattr(args, 'plif_t', 20)
+    args.plif_w_variance = getattr(args, 'plif_w_variance', 1.0)
+    args.plif_lr = getattr(args, 'plif_lr', 0.02)
+
 
 @register_model_architecture('transformer_lm', 'transformer_lm_big')
 def transformer_lm_big(args):

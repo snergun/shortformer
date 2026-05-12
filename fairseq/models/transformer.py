@@ -623,6 +623,10 @@ class TransformerDecoder(FairseqIncrementalDecoder):
                 threshold_min=args.threshold_min,
                 threshold_max=args.threshold_max,
                 fixed_thresholds=args.fixed_thresholds,
+                plif_k=args.plif_k,
+                plif_t=args.plif_t,
+                plif_w_variance=args.plif_w_variance,
+                plif_lr=args.plif_lr,
             )
         elif self.share_input_output_embed:
             self.output_projection = nn.Linear(

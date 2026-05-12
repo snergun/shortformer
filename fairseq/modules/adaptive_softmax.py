@@ -14,6 +14,7 @@ from torch import nn
 
 ## MINE
 from fairseq.modules.temperature import TemperatureScaler
+from fairseq.modules.plif import Plif
 from line_profiler import profile
 
 class TiedLinear(nn.Module):
@@ -61,7 +62,8 @@ class AdaptiveSoftmax(nn.Module):
 
     def __init__(self, vocab_size, input_dim, cutoff, dropout, factor=4., adaptive_inputs=None, tie_proj=False,
                  q_noise=0, qn_block_size=8,
-                 temp_degree=None, temp_pieces=1, threshold_min=-30, threshold_max=30, fixed_thresholds=False):
+                 temp_degree=None, temp_pieces=1, threshold_min=-30, threshold_max=30, fixed_thresholds=False,
+                 plif_k=None, plif_t=20, plif_w_variance=1.0, plif_lr=0.02):
         super().__init__()
 
         if vocab_size > cutoff[-1]:
@@ -100,6 +102,7 @@ class AdaptiveSoftmax(nn.Module):
         ## Initialize temperature scaler
         self.temperature_scaler = None
         if temp_degree is not None and temp_degree > 0:
+            print('Using piecewise temperature scaling with degree %d and %d pieces' % (temp_degree, temp_pieces))
             self.temperature_scaler = TemperatureScaler(
                 n_temp = len(cutoff),
                 degree=temp_degree,
@@ -107,6 +110,11 @@ class AdaptiveSoftmax(nn.Module):
                 threshold_min=threshold_min, 
                 threshold_max=threshold_max, 
                 fixed_thresholds=fixed_thresholds)
+        elif plif_k is not None and plif_k > 1:
+            print('Using PLIF temperature scaling with k=%d, t=%.2f, w_variance=%.2f, lr=%.4f' % (plif_k, plif_t, plif_w_variance, plif_lr))
+            self.temperature_scaler = nn.ModuleList([
+                Plif(plif_k, plif_t, plif_w_variance)
+                for _ in range(len(cutoff))])
 
     def _make_tail(self, adaptive_inputs=None, tie_proj=False):
         self.tail = nn.ModuleList()
@@ -183,14 +191,20 @@ class AdaptiveSoftmax(nn.Module):
         new_target, target_idxs = self.adapt_target(target)
         head_output = self.head(input)
         if self.temperature_scaler is not None:
-            head_output = self.temperature_scaler(head_output, 0)
+            if isinstance(self.temperature_scaler, TemperatureScaler):
+                head_output = self.temperature_scaler(head_output, 0)
+            else:
+                head_output = self.temperature_scaler[0](head_output)
         output = [head_output]
 
         for i in range(len(target_idxs)):
             if target_idxs[i] is not None:
                 cluster_out = self.tail[i](input.index_select(0, target_idxs[i]))
                 if self.temperature_scaler is not None:
-                    cluster_out = self.temperature_scaler(cluster_out, i + 1)
+                    if isinstance(self.temperature_scaler, TemperatureScaler):
+                        cluster_out = self.temperature_scaler(cluster_out, i + 1)
+                    else:
+                        cluster_out = self.temperature_scaler[i + 1](cluster_out)
                 output.append(cluster_out)
             else:
                 output.append(None)
